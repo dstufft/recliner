@@ -18,7 +18,9 @@ setup(
     author=__about__["__author__"],
     author_email=__about__["__email__"],
 
-    install_requires=[],
+    install_requires=[
+        "docutils",
+    ],
     extras_require={
         "tests": [
             "pep8",
