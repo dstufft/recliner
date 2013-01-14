@@ -19,7 +19,8 @@ setup(
     author_email=__about__["__email__"],
 
     install_requires=[
-        "docutils",
+        "docutils>=0.9",
+        "Pygments",
     ],
     extras_require={
         "tests": [

@@ -2,7 +2,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import unicode_literals
 
-from recliner import __about__
+from . import __about__
+from .renderer import render
+
+
+__all__ = ["render"] + __about__.__all__
 
 
 # - Meta Information -
