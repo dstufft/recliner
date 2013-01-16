@@ -24,7 +24,9 @@ def main():
     else:
         text = sys.stdin.read()
 
-    sys.stdout.write(render(text, highlight=args.highlight).encode("utf-8"))
+    rendered = render(text)
+
+    sys.stdout.write(rendered.encode("utf-8"))
     sys.stdout.flush()
 
 
