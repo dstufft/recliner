@@ -3,10 +3,10 @@ from __future__ import division
 from __future__ import unicode_literals
 
 from . import __about__
-from .renderer import render
+from .renderer import render, clean, htmlize
 
 
-__all__ = ["render"] + __about__.__all__
+__all__ = ["render", "clean", "htmlize"] + __about__.__all__
 
 
 # - Meta Information -

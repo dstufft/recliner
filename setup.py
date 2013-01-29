@@ -19,6 +19,7 @@ setup(
     author_email=__about__["__email__"],
 
     install_requires=[
+        "bleach>=1.2",
         "docutils>=0.9",
         "Pygments",
     ],

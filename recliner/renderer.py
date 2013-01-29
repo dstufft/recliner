@@ -3,13 +3,49 @@ from __future__ import division
 from __future__ import unicode_literals
 
 import io
+import sys
 
 from docutils.core import publish_parts
 from docutils.writers.html4css1 import HTMLTranslator, Writer
 from docutils.utils import SystemMessage
 
+import bleach
 
-__all__ = ["render"]
+
+__all__ = ["render", "clean", "htmlize"]
+
+
+ALLOWED_TAGS = [
+    # Bleach Defaults
+    "a", "abbr", "acronym", "b", "blockquote", "code", "em", "i", "li", "ol",
+    "strong", "ul",
+
+    # Recliner Additions
+    "br", "cite", "col", "colgroup", "dd", "div", "dl", "dt", "h1", "h2", "h3",
+    "h4", "h5", "h6", "img", "p", "pre", "span", "table", "tbody", "td", "th",
+    "thead", "tr", "tt",
+]
+
+ALLOWED_ATTRIBUTES = {
+    # Bleach Defaults
+    "a": ["href", "title"],
+    "abbr": ["title"],
+    "acronym": ["title"],
+}
+
+ALLOWED_ATTRIBUTES.update({
+    # Recliner Additions
+    "img": ["src"],
+    "span": ["class"],
+})
+
+ALLOWED_STYLES = []
+
+
+class HTML(str if sys.version_info[0] == 3 else unicode):
+
+    raw = None
+    rendered = False
 
 
 def render(raw):
@@ -30,7 +66,7 @@ def render(raw):
 
         # Halt rendering and throw an exception if there was any errors or
         #   warnings from docutils.
-        "halt_level": 0,
+        "halt_level": 2,
 
         # Output math blocks as LaTeX that can be interpreted by MathJax for
         #   a prettier display of Math formulas.
@@ -76,3 +112,50 @@ def render(raw):
         raise ValueError("There was no rendered value")
 
     return rendered
+
+
+def clean(html):
+    def nofollow(attrs, new=False):
+        if attrs["href"].startswith("mailto:"):
+            return attrs
+        attrs["rel"] = "nofollow"
+        return attrs
+
+    # Clean the output using Bleach
+    cleaned = bleach.clean(html,
+                tags=ALLOWED_TAGS,
+                attributes=ALLOWED_ATTRIBUTES,
+                styles=ALLOWED_STYLES,
+            )
+
+    # Bleach Linkify makes it easy to modify links, however, we will not be
+    #   using it to create additional links.
+    cleaned = bleach.linkify(cleaned,
+                callbacks=[
+                    lambda attrs, new: attrs if not new else None,
+                    nofollow,
+                ],
+                skip_pre=True,
+                parse_email=False,
+            )
+
+    return cleaned
+
+
+def htmlize(text):
+    # Try to render the text, or use the text itself
+    try:
+        html = render(text)
+        rendered = True
+    except ValueError:
+        html = text
+        rendered = False
+
+    # Clean the (possibly) rendered text
+    cleaned = clean(html)
+
+    cleaned = HTML(cleaned)
+    cleaned.raw = text
+    cleaned.rendered = rendered
+
+    return cleaned
