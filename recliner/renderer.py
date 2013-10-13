@@ -3,13 +3,14 @@ from __future__ import division
 from __future__ import unicode_literals
 
 import io
-import sys
 
 from docutils.core import publish_parts
 from docutils.writers.html4css1 import HTMLTranslator, Writer
 from docutils.utils import SystemMessage
 
 import bleach
+
+from . import six
 
 
 __all__ = ["render", "clean", "htmlize"]
@@ -42,7 +43,7 @@ ALLOWED_ATTRIBUTES.update({
 ALLOWED_STYLES = []
 
 
-class HTML(str if sys.version_info[0] == 3 else unicode):
+class HTML(six.text_type):
 
     raw = None
     rendered = False
@@ -57,7 +58,10 @@ def render(raw):
         # Prevent a lone top level heading from being promoted to document
         #   title, and thus second level headings from being promoted to top
         #   level.
-        "doctitle_xform": False,
+        "doctitle_xform": True,
+
+        # Set our initial header level
+        "initial_header_level": 2,
 
         # Prevent local files from being included into the rendered output.
         #   This is a security concern because people can insert files
