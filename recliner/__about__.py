@@ -11,7 +11,7 @@ __title__ = "recliner"
 __summary__ = ""
 __uri__ = "https://github.com/crateio/recliner/"
 
-__version__ = "0.1"
+__version__ = "0.2"
 
 __author__ = "Donald Stufft"
 __email__ = "donald.stufft@gmail.com"
