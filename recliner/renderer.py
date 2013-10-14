@@ -110,7 +110,7 @@ def render(raw):
     except SystemMessage as exc:
         raise ValueError(exc.message)
 
-    rendered = parts.get("html_body")
+    rendered = parts.get("fragment")
 
     if rendered is None:
         raise ValueError("There was no rendered value")
