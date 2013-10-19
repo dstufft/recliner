@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 __about__ = {}
 
 with open("recliner/__about__.py") as fp:
-    exec(fp, None, __about__)
+    exec(fp.read(), None, __about__)
 
 setup(
     name=__about__["__title__"],
