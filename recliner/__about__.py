@@ -11,7 +11,7 @@ __title__ = "recliner"
 __summary__ = ""
 __uri__ = "https://github.com/dstufft/recliner/"
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 __author__ = "Donald Stufft"
 __email__ = "donald.stufft@gmail.com"

@@ -108,7 +108,7 @@ def render(raw):
                     settings_overrides=settings,
                 )
     except SystemMessage as exc:
-        raise ValueError(exc.message)
+        raise ValueError(str(exc))
 
     rendered = parts.get("fragment")
 
